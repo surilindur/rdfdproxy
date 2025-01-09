@@ -1,0 +1,27 @@
+services:
+  jena:
+    build:
+      # https://github.com/apache/jena/tree/main/jena-fuseki2/jena-fuseki-docker
+      context: https://github.com/apache/jena.git#main:jena-fuseki2/jena-fuseki-docker
+      args:
+        # https://hub.docker.com/_/alpine
+        ALPINE_VERSION: 3
+        # https://hub.docker.com/_/eclipse-temurin
+        JAVA_VERSION: 24
+        # start with 256MB, then go up until 2GB
+        JAVA_OPTIONS: -Xms256m -Xmx2048m
+        # https://repo1.maven.org/maven2/org/apache/jena/jena-fuseki-server/
+        JENA_VERSION: 5.3.0
+    command: --strict --config /fuseki/config.ttl
+    container_name: jena
+    healthcheck:
+      test: wget --spider http://localhost:3030/
+      interval: 5s
+      timeout: 1s
+      retries: 3
+    ports:
+      - 3030:3030
+    volumes:
+      - ./config.ttl:/fuseki/config.ttl:ro
+      - ./data.trig:/fuseki/data.trig:ro
+      - ./passwords.yaml:/fuseki/passwords.yaml:ro

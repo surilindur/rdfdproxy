@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% if graph %}
+    {% for predicate, object in graph.predicate_objects(subject=graph.identifier, unique=True) %}
+    <meta property="{{ predicate }}" content="{{ object }}" />
+    {% endfor %}
+    {% endif %}
+    <title>RDF Document Proxy</title>
+</head>
+
+<body>
+    {% block body %}{% endblock %}
+</body>
+
+</html>
