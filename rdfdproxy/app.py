@@ -5,6 +5,7 @@ from typing import Dict
 from pathlib import Path
 from logging import exception
 from os.path import splitext
+from urllib.parse import urlparse
 
 from flask import Flask
 from flask import request
@@ -19,6 +20,7 @@ from werkzeug.exceptions import NotAcceptable
 from werkzeug.exceptions import InternalServerError
 
 from rdflib.term import URIRef
+from rdflib.namespace import RDF
 
 from storage import get_document_resources
 from constants import ACCEPT_MIMETYPES
@@ -64,8 +66,26 @@ def get_document(path: str = "/") -> Response:
     format_keyword = MIMETYPE_FORMATS[mimetype]
 
     if format_keyword == "html":
-        if "graph" in templates:
-            return render_template(templates["graph"], graph=document_graph)
+        template_key: str | None = "graph" if "graph" in templates else None
+        for type_uri in document_graph.objects(
+            subject=document_graph.identifier,
+            predicate=RDF.type,
+            unique=True,
+        ):
+            if isinstance(type_uri, URIRef):
+                parsed_type = urlparse(type_uri)
+                if parsed_type.fragment:
+                    fragment = parsed_type.fragment.lower()
+                    if fragment in templates:
+                        template_key = fragment
+                        break
+                else:
+                    last_path_element = parsed_type.path.split("/").pop().lower()
+                    if last_path_element in templates:
+                        template_key = last_path_element
+                        break
+        if template_key:
+            return render_template(templates[template_key], graph=document_graph)
     else:
         return Response(
             response=document_graph.serialize(format=format_keyword),

@@ -73,6 +73,9 @@ jobs:
         run: curl -I --retry 20 --retry-all-errors --retry-delay 1 http://localhost:8000/
       - name: Test document conversion for HTML
         run: |
+          curl -I -H "accept: text/html" http://localhost:8000/webid
+      - name: Test document conversion for HTML with type-specific template
+        run: |
           curl -I -H "accept: text/html" http://localhost:8000/
       - name: Test document conversion for Turtle
         run: |

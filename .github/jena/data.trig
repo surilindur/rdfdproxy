@@ -1,4 +1,5 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix schema: <https://schema.org/> .
 
 <http://localhost:3030/test> {
@@ -10,9 +11,13 @@
     <http://localhost:8000/#fragment> schema:name "Frontpage fragment" ;
         schema:description "Example fragment." .
 
-    <http://localhost:8000/about> rdf:type schema:DigitalDocument ;
-        schema:name "About" ;
-        schema:description "Example about page." .
+    <http://localhost:8000/webid> rdf:type foaf:PersonalProfileDocument ;
+        schema:name "WebID" ;
+        schema:description "Example WebID document." ;
+        foaf:primaryTopic <http://localhost:8000/webid#me> .
+
+    <http://localhost:8000/webid#me> rdf:type foaf:Person ;
+        foaf:name "Example Person" .
 
 }
 
