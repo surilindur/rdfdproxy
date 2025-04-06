@@ -1,10 +1,13 @@
 """Simple Flask application to serve RDF data as documents from a graph."""
 
 from http import HTTPStatus
+from typing import Any
 from typing import Dict
 from pathlib import Path
 from logging import exception
 from os.path import splitext
+from datetime import UTC
+from datetime import datetime
 from urllib.parse import urlparse
 
 from flask import Flask
@@ -13,6 +16,8 @@ from flask import render_template
 from flask.wrappers import Response
 
 from flask_cors import CORS as FlaskCORS
+
+from mistune import html
 
 from werkzeug.exceptions import HTTPException
 from werkzeug.exceptions import NotFound
@@ -115,6 +120,15 @@ def get_robots() -> Response:
     if not request.accept_mimetypes.find("text/plain"):
         raise NotAcceptable()
     return render_template(templates["robots"])
+
+
+@app.context_processor
+def handle_context() -> Dict[str, Any]:
+    """Add various utility types into the template context."""
+    return {
+        "now": datetime.now(tz=UTC),
+        "html": html,
+    }
 
 
 @app.errorhandler(Exception)

@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% set schema_article_body = graph.namespace_manager.absolutize("https://schema.org/articleBody") %}
+{% set content_html = html(graph.value(subject=graph.identifier, predicate=schema_article_body)) %}
+{% block main %}
+{{ content_html|safe }}
+{% endblock %}
