@@ -32,8 +32,11 @@ app = Flask(import_name=__name__)
 app.jinja_env.lstrip_blocks = True
 app.jinja_env.trim_blocks = True
 
-# Flask-CORS with credentials support, to avoid breakage if a client sends them
-cors = FlaskCORS(app=app, supports_credentials=True)
+# Load configuration from environment variables if available
+app.config.from_prefixed_env()
+
+# Setup Flask-CORS
+cors = FlaskCORS(app=app)
 
 # List of all template names for faster lookups
 templates: Dict[str, str] = {

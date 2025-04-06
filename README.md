@@ -60,6 +60,8 @@ Templates for HTML serialisation can be provided in the templates directory:
   The error is supplied to the template in the variable `error`.
 * The `robots.txt` file can be served by adding a template for it in the templates directory.
 
+Further configuration is possible for Flask and Flask-CORS via [environment variables](https://flask.palletsprojects.com/en/stable/api/#flask.Config.from_prefixed_env).
+
 ## Issues
 
 Please feel free to report any issues on the GitHub issue tracker.
