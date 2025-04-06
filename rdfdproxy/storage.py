@@ -19,6 +19,9 @@ def get_graph() -> Graph | None:
     graph_uri = URIRef(getenv("SPARQL_GRAPH"))
     endpoint_uri = URIRef(getenv("SPARQL_ENDPOINT"))
 
+    assert endpoint_uri, "Missing SPARQL endpint URI"
+    assert graph_uri, "Missing graph URI"
+
     username = getenv("SPARQL_USERNAME")
     password = getenv("SPARQL_PASSWORD")
     auth = (username, password) if username and password else None
