@@ -92,6 +92,9 @@ jobs:
       - name: Test document conversion for RDF+XML
         run: |
           curl -I -H "accept: application/rdf+xml" http://localhost:8000/
+      - name: Test HTTP redirection for owl:sameAs
+        run: |
+          curl -I http://localhost:8000/redirected
       - name: Stop application container
         run: docker stop rdfdproxy
       - name: Stop SPARQL endpoint

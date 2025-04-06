@@ -1,4 +1,5 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix schema: <https://schema.org/> .
 
@@ -19,6 +20,7 @@
     <http://localhost:8000/webid#me> rdf:type foaf:Person ;
         foaf:name "Example Person" .
 
+    <http://localhost:8000/redirected> owl:sameAs <http://localhost:8000/> .
 }
 
 <http://localhost:3030/unrelated> {

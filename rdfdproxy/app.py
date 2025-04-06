@@ -21,6 +21,7 @@ from werkzeug.exceptions import InternalServerError
 
 from rdflib.term import URIRef
 from rdflib.namespace import RDF
+from rdflib.namespace import OWL
 
 from storage import get_document_resources
 from constants import ACCEPT_MIMETYPES
@@ -62,6 +63,14 @@ def get_document(path: str = "/") -> Response:
 
     if not document_graph:
         raise NotFound()
+
+    same_as = document_graph.value(subject=document_uri, predicate=OWL.sameAs)
+
+    if same_as and isinstance(same_as, URIRef):
+        return Response(
+            status=HTTPStatus.TEMPORARY_REDIRECT,
+            headers={"location": same_as},
+        )
 
     format_keyword = MIMETYPE_FORMATS[mimetype]
 
